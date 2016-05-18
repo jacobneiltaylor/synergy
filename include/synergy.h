@@ -29,6 +29,7 @@
 	#include <dlfcn.h>
 	#include <linux/limits.h>
 	#include <string.h>
+	#include <stdexcept>
 #endif
 
 // STL Dependancies
