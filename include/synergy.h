@@ -27,6 +27,8 @@
 // Custom macro required for building this library on a POSIX platform
 #ifdef _POSIXSO
 	#include <dlfcn.h>
+	#include <linux/limits.h>
+	#include <string.h>
 #endif
 
 // STL Dependancies
