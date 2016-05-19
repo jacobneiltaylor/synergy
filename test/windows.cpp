@@ -1,4 +1,5 @@
 #include "synergy.h"
+#include <iostream>
 
 using namespace taylornet::synergy;
 
@@ -15,7 +16,8 @@ int main()
 
 	loader->unloadAll();
 
-	system("PAUSE");
+	std::cout << "Press ENTER to continue ...";
+	std::cin.get();
 
 	return false;
 }
