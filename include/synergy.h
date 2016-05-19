@@ -37,6 +37,7 @@
 #include <string>
 #include <stack>
 #include <queue>
+#include <map>
 
 // Forward class declarations
 namespace taylornet
