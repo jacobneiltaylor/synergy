@@ -56,3 +56,9 @@ void loader::unloadAll()
 		delete lib;
 	}
 }
+
+#ifdef WINDOWS
+	#include "natives\windows\loader_windows.cpp"
+#elif defined(POSIX)
+	#include "natives\posix\loader_posix.cpp"
+#endif

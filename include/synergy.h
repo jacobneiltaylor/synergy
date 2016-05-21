@@ -14,6 +14,7 @@
 
 // Define export attributes for Windows platform
 #ifdef _WIN32
+	#define WINDOWS
 	#ifdef _WINDLL
 		#define LIBSYNERGY_API __declspec(dllexport) 
 		#include <windows.h>
@@ -21,6 +22,7 @@
 		#define LIBSYNERGY_API
 	#endif
 #else
+	#define POSIX
 	#define LIBSYNERGY_API
 #endif
 

@@ -44,3 +44,9 @@ std::string library::getFilename()
 {
 	return filename;
 }
+
+#ifdef WINDOWS
+	#include "natives\windows\library_windows.cpp"
+#elif defined(POSIX)
+	#include "natives\posix\library_posix.cpp"
+#endif
