@@ -1,0 +1,78 @@
+// build.gradle
+apply plugin: 'cpp'
+
+def VS_2015_INCLUDE_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\"
+def VS_2015_LIB_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.10586.0\\"
+
+model {
+
+	platforms
+	{
+		x86 {
+			architecture "x86"
+		}
+
+		x64 {
+			architecture "x64"
+		}
+	}
+
+	components {
+		synergy(NativeLibrarySpec) {
+			targetPlatform "x86"
+            targetPlatform "x64"
+			sources {
+				cpp {
+					source.srcDir "../src/"
+					source.include "**/**.cpp"
+					source.exclude "**/natives/**/**.cpp"
+					exportedHeaders.srcDir "../include/"
+				}
+			}
+		}
+	}
+
+	binaries {
+		all {
+			if(targetPlatform.operatingSystem.isWindows())
+			{
+				cppCompiler.args "/EHsc"
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "ucrt" 
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "shared"
+
+				if(targetPlatform.architecture.name == "x86") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x86"
+				}
+				else if(targetPlatform.architecture.name == "x86-64" || targetPlatform.architecture.name == "x86_64" || targetPlatform.architecture.name == "amd64" || targetPlatform.architecture.name == "x64") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x64"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x64"
+				}
+			}
+		}
+
+		withType(NativeLibraryBinarySpec) {
+			if(!targetPlatform.operatingSystem.isWindows())
+			{
+				cppCompiler.define "_POSIXSO"
+			}
+			else
+			{
+				cppCompiler.define "_WIN32"
+				cppCompiler.define "_WINDLL"
+				cppCompiler.args "/EHsc"
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "ucrt" 
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "shared"
+
+				if(targetPlatform.architecture.name == "x86") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x86"
+				}
+				else if(targetPlatform.architecture.name == "x86_64" || targetPlatform.architecture.name == "amd64") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x64"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x64"
+				}
+			}
+		}
+	}
+}
