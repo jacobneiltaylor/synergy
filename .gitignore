@@ -238,3 +238,4 @@ _Pvt_Extensions
 vs/
 build/build/
 build/.gradle
+test/googletest

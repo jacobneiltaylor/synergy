@@ -1,8 +1,10 @@
 // build.gradle
 apply plugin: 'cpp'
+apply plugin: 'google-test'
 
 def VS_2015_INCLUDE_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\"
 def VS_2015_LIB_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.10586.0\\"
+def GTEST_INCLUDE_DIR = "../test/googletest/include/"
 
 model {
 
@@ -32,10 +34,37 @@ model {
 		}
 	}
 
+	repositories {
+		libs(PrebuiltLibraries)
+		{
+			gtest 
+			{
+				headers.srcDir GTEST_INCLUDE_DIR
+				binaries.withType(StaticLibraryBinary) {
+					staticLibraryFile = file(getGTestLib(targetPlatform))
+				}
+			}
+		}
+	}
+
+	testSuites {
+		synergyTest {
+			sources {
+				cpp {
+					source.srcDir "../test/"
+					source.include "**/test_main.cpp"
+					source.exclude "**/googletest/**.cpp"
+					exportedHeaders.srcDir "../include/"
+				}
+			}
+		}
+	}
+
 	binaries {
 		all {
 			if(targetPlatform.operatingSystem.isWindows())
 			{
+				cppCompiler.define "_WIN32"
 				cppCompiler.args "/EHsc"
 				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "ucrt" 
 				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "shared"
@@ -44,7 +73,7 @@ model {
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x86"
 				}
-				else if(targetPlatform.architecture.name == "x86-64" || targetPlatform.architecture.name == "x86_64" || targetPlatform.architecture.name == "amd64" || targetPlatform.architecture.name == "x64") {
+				else if(targetPlatform.architecture.name == "x86-64") {
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x64"
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x64"
 				}
@@ -68,11 +97,61 @@ model {
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x86"
 				}
-				else if(targetPlatform.architecture.name == "x86_64" || targetPlatform.architecture.name == "amd64") {
+				else if(targetPlatform.architecture.name == "x86-64") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x64"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x64"
+				}
+			}
+		}
+
+		withType(GoogleTestTestSuiteBinarySpec){
+			lib library: "gtest", linkage: "static"
+			if(!targetPlatform.operatingSystem.isWindows())
+			{
+				cppCompiler.define "_POSIXSO"
+			}
+			else
+			{
+				cppCompiler.define "_WIN32"
+				cppCompiler.define "_WINDLL"
+				cppCompiler.args "/EHsc"
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "ucrt" 
+				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "shared"
+				cppCompiler.args "-I" + GTEST_INCLUDE_DIR
+
+				if(targetPlatform.architecture.name == "x86") {
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
+					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x86"
+				}
+				else if(targetPlatform.architecture.name == "x86-64") {
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x64"
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "ucrt\\x64"
 				}
 			}
 		}
 	}
+}
+
+def getGTestLib(Platform platform)
+{
+	def GTEST_MSVC_LIB_DIR = "../test/googletest/msvc/"
+	
+	if(platform.operatingSystem.isWindows())
+	{
+		if(platform.architecture.name == "x86") {
+			return GTEST_MSVC_LIB_DIR + "gtest\\Release\\gtest.lib"
+		}
+		else if (platform.architecture.name == "x86-64") {
+			return GTEST_MSVC_LIB_DIR + "x64\\Release\\gtest.lib"
+		}
+	}
+	else if(platform.operatingSystem.isLinux())
+	{
+		return "Y";
+	}
+	else
+	{
+		return "X";
+	}
+	return "Unknown";
 }
