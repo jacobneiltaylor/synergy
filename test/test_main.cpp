@@ -38,7 +38,7 @@ TEST_F(SynergyTest, CanLoadLibrary)
 
 	try
 	{
-		
+		cruntime = loader->load(CRT_FILE_NAME);
 	}
 	catch (std::runtime_error e)
 	{
