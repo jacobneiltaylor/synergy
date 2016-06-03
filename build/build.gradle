@@ -2,6 +2,8 @@
 apply plugin: 'cpp'
 apply plugin: 'google-test'
 
+import org.apache.tools.ant.taskdefs.condition.Os
+
 def VS_2015_INCLUDE_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\"
 def VS_2015_LIB_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.10586.0\\"
 def GTEST_INCLUDE_DIR = "gtest/googletest/include/"
@@ -37,7 +39,7 @@ model {
 	repositories {
 		libs(PrebuiltLibraries)
 		{
-			gtest 
+			gtest
 			{
 				headers.srcDir GTEST_INCLUDE_DIR
 				binaries.withType(StaticLibraryBinary) {
@@ -135,17 +137,23 @@ model {
 	}
 }
 
+task googletest (type: Exec) {
+	if(Os.isFamily(Os.FAMILY_WINDOWS)) {
+		commandLine "powershell","./gtest/gtest-build.ps1"
+	}
+}
+
 def getGTestLib(Platform platform)
 {
-	def GTEST_MSVC_LIB_DIR = "gtest/googletest/msvc/"
+	def GTEST_LIB_DIR = "gtest/googletest/"
 	
 	if(platform.operatingSystem.isWindows())
 	{
 		if(platform.architecture.name == "x86") {
-			return GTEST_MSVC_LIB_DIR + "gtest\\Release\\gtest.lib"
+			return GTEST_LIB_DIR + "x86\\Release\\gtest.lib"
 		}
 		else if (platform.architecture.name == "x86-64") {
-			return GTEST_MSVC_LIB_DIR + "x64\\Release\\gtest.lib"
+			return GTEST_LIB_DIR + "x64\\Release\\gtest.lib"
 		}
 	}
 	else if(platform.operatingSystem.isLinux())
