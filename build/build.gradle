@@ -102,7 +102,10 @@ model {
 		withType(NativeLibraryBinarySpec) {
 			if(!targetPlatform.operatingSystem.isWindows())
 			{
+				cppCompiler.args "-std=c++11"
 				cppCompiler.define "_POSIXSO"
+
+				linker.args "-std=c++11"
 			}
 			else
 			{
@@ -128,7 +131,10 @@ model {
 			lib library: "gtest", linkage: "static"
 			if(!targetPlatform.operatingSystem.isWindows())
 			{
+				cppCompiler.args "-std=c++11"
 				cppCompiler.define "_POSIXSO"
+
+				linker.args "-std=c++11"
 			}
 			else
 			{
