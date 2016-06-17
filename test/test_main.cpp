@@ -5,7 +5,7 @@
 	#define CRT_FILE_NAME "ucrtbase.dll"
 #elif defined(__linux__)
 	#if defined(__i386__)
-		#define CRT_FILE_NAME " /lib/i386-linux-gnu/libm.so.6"
+		#define CRT_FILE_NAME "/lib/i386-linux-gnu/libm.so.6"
 	#elif defined(__amd64__)
 		#define CRT_FILE_NAME "/lib/x86_64-linux-gnu/libm.so.6"
 	#endif
