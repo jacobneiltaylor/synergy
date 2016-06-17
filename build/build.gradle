@@ -107,6 +107,7 @@ model {
 				cppCompiler.define "_POSIXSO"
 
 				linker.args "-std=c++11"
+				linker.args "-ldl"
 			}
 			else
 			{
@@ -136,6 +137,8 @@ model {
 				cppCompiler.define "_POSIXSO"
 
 				linker.args "-std=c++11"
+				linker.args "-ldl"
+				linker.args "-lpthread"
 			}
 			else
 			{
@@ -175,10 +178,10 @@ def getGTestLib(Platform platform)
 	else 
 	{
 		if(platform.architecture.name == "x86") {
-			return GTEST_LIB_DIR + "x86/gtest.a"
+			return GTEST_LIB_DIR + "x86/libgtest.a"
 		}
 		else if (platform.architecture.name == "x86-64") {
-			return GTEST_LIB_DIR + "x64/gtest.a"
+			return GTEST_LIB_DIR + "x64/libgtest.a"
 		}
 	}
 	return "Unknown";
