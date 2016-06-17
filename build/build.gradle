@@ -73,6 +73,7 @@ model {
 					source.include "**/test_main.cpp"
 					source.exclude "**/googletest/**.cpp"
 					exportedHeaders.srcDir "../include/"
+					exportedHeaders.srcDir "./gtest/googletest/include/"
 				}
 			}
 		}
