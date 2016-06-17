@@ -6,7 +6,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 def VS_2015_INCLUDE_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\include\\10.0.10586.0\\"
 def VS_2015_LIB_DIR = "C:\\Program Files (x86)\\Windows Kits\\10\\Lib\\10.0.10586.0\\"
-def GTEST_INCLUDE_DIR = "gtest/googletest/include/"
+def GTEST_INCLUDE_DIR = "../build/gtest/googletest/include/"
 
 model {
 
@@ -73,7 +73,7 @@ model {
 					source.include "**/test_main.cpp"
 					source.exclude "**/googletest/**.cpp"
 					exportedHeaders.srcDir "../include/"
-					exportedHeaders.srcDir "./gtest/googletest/include/"
+					exportedHeaders.srcDir "../build/gtest/googletest/include/"
 				}
 			}
 		}
@@ -130,7 +130,6 @@ model {
 
 		withType(GoogleTestTestSuiteBinarySpec){
 			lib library: "gtest", linkage: "static"
-			cppCompiler.args "-I" + GTEST_INCLUDE_DIR
 			if(!targetPlatform.operatingSystem.isWindows())
 			{
 				cppCompiler.args "-std=c++11"
