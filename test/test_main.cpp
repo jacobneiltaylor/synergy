@@ -3,8 +3,16 @@
 
 #ifdef _WIN32
 	#define CRT_FILE_NAME "ucrtbase.dll"
-#else
-	#define CRT_FILE_NAME
+#elif defined(__linux__)
+	#if defined(__i386__)
+		#define CRT_FILE_NAME " /lib/i386-linux-gnu/libm.so.6"
+	#elif defined(__amd64__)
+		#define CRT_FILE_NAME "/lib/x86_64-linux-gnu/libm.so.6"
+	#endif
+#elif defined (__APPLE__)
+	#define CRT_FILE_NAME ""
+#elif defined (__unix__)
+	#define CRT_FILE_NAME ""
 #endif
 
 using namespace taylornet::synergy;
