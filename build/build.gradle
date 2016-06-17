@@ -129,6 +129,7 @@ model {
 
 		withType(GoogleTestTestSuiteBinarySpec){
 			lib library: "gtest", linkage: "static"
+			cppCompiler.args "-I" + GTEST_INCLUDE_DIR
 			if(!targetPlatform.operatingSystem.isWindows())
 			{
 				cppCompiler.args "-std=c++11"
@@ -144,7 +145,6 @@ model {
 				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "ucrt" 
 				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "shared"
 				cppCompiler.args "-I" + VS_2015_INCLUDE_DIR + "um"
-				cppCompiler.args "-I" + GTEST_INCLUDE_DIR
 
 				if(targetPlatform.architecture.name == "x86") {
 					linker.args "/LIBPATH:" + VS_2015_LIB_DIR + "um\\x86"
