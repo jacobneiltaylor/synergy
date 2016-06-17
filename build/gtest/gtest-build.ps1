@@ -45,13 +45,15 @@ cd ..
 $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
 
 # Build 32bit
+Write-Host "Beginning build: GoogleTest (32bit)"
+
 cd x86
 
 cmake -G "Visual Studio 14 2015" ../
 
 if ((Invoke-MsBuild -Path $PSScriptRoot"\googletest\x86\gtest.sln" -MsBuildParameters "/property:Configuration=Release;Platform=Win32").BuildSucceeded -eq $true)
 {
-    Write-Host "Build succeded for GoogleTest (32bit)"
+    Write-Host "Build succeeded for GoogleTest (32bit)"
 }
 else
 {
@@ -62,13 +64,15 @@ else
 cd ..
 
 # Build 64bit
+Write-Host "Beginning build: GoogleTest (64bit)"
+
 cd x64
 
 cmake -G "Visual Studio 14 2015 Win64" ../
 
 if((Invoke-MsBuild -Path $PSScriptRoot"\googletest\x64\gtest.sln" -MsBuildParameters "/property:Configuration=Release;Platform=x64").BuildSucceeded -eq $true)
 {
-    Write-Host "Build succeded for GoogleTest (64bit)"
+    Write-Host "Build succeeded for GoogleTest (64bit)"
 }
 else
 {
