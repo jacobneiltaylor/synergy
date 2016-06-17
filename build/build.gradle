@@ -49,6 +49,22 @@ model {
 		}
 	}
 
+	tasks {
+
+		buildGoogleTest (Exec) {
+			if(Os.isFamily(Os.FAMILY_WINDOWS)) {
+				commandLine "powershell","./gtest/gtest-build.ps1"
+			}
+			else {
+				commandLine "/bin/sh","./gtest/gtest-build.sh"
+			}
+		}
+		
+		withType(CppCompile) {
+			dependsOn buildGoogleTest
+		}
+	}
+
 	testSuites {
 		synergyTest {
 			sources {
@@ -137,12 +153,6 @@ model {
 	}
 }
 
-task googletest (type: Exec) {
-	if(Os.isFamily(Os.FAMILY_WINDOWS)) {
-		commandLine "powershell","./gtest/gtest-build.ps1"
-	}
-}
-
 def getGTestLib(Platform platform)
 {
 	def GTEST_LIB_DIR = "gtest/googletest/"
@@ -156,13 +166,14 @@ def getGTestLib(Platform platform)
 			return GTEST_LIB_DIR + "x64\\Release\\gtest.lib"
 		}
 	}
-	else if(platform.operatingSystem.isLinux())
+	else 
 	{
-		return "Y";
-	}
-	else
-	{
-		return "X";
+		if(platform.architecture.name == "x86") {
+			return GTEST_LIB_DIR + "x86/gtest.lib"
+		}
+		else if (platform.architecture.name == "x86-64") {
+			return GTEST_LIB_DIR + "x64/gtest.lib"
+		}
 	}
 	return "Unknown";
 }
