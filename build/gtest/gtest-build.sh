@@ -31,17 +31,51 @@ mkdir "x64"
 echo "Beginning build: GoogleTest (32bit)"
 
 cd "x86"
+if [ "$OSTYPE" = "darwin"* ]
+then
+	cmake -DCMAKE_OSX_ARCHITECTURES=i386 -G "Unix Makefiles" ../
+else
+	export CFLAGS="-m32"
+	export CXXFLAGS="-m32"
+	export LDFLAGS="-m32"
+	cmake -G "Unix Makefiles" ../
+fi
 
-cmake -G "Unix Makefiles" ../
+make clean
 make
+
+if [ $? -eq 0 ]
+then
+	echo "Build succeeded for GoogleTest (32bit)"
+else
+	echo "Build failed for GoogleTest (32bit)"
+fi
 
 cd ..
 
 # 64-bit build
 echo "Beginning build: GoogleTest (64bit)"
 
-cmake -G "Unix Makefiles" ../
+cd "x64"
+if [ "$OSTYPE" = "darwin"* ]
+then
+	cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 -G "Unix Makefiles" ../
+else
+	export CFLAGS="-m64"
+	export CXXFLAGS="-m64"
+	export LDFLAGS="-m64"
+	cmake -G "Unix Makefiles" ../
+fi
+
+make clean
 make
+
+if [ $? -eq 0 ]
+then
+	echo "Build succeeded for GoogleTest (64bit)"
+else
+	echo "Build failed for GoogleTest (64bit)"
+fi
 
 cd ..
 
