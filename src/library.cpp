@@ -46,7 +46,7 @@ std::string library::getFilename()
 }
 
 #ifdef WINDOWS
-	#include "natives\windows\library_windows.cpp"
+	#include "./natives/windows/library_windows.cpp"
 #elif defined(POSIX)
-	#include "natives\posix\library_posix.cpp"
+	#include "./natives/library_posix.cpp"
 #endif
