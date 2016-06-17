@@ -169,10 +169,10 @@ def getGTestLib(Platform platform)
 	else 
 	{
 		if(platform.architecture.name == "x86") {
-			return GTEST_LIB_DIR + "x86/gtest.lib"
+			return GTEST_LIB_DIR + "x86/gtest.a"
 		}
 		else if (platform.architecture.name == "x86-64") {
-			return GTEST_LIB_DIR + "x64/gtest.lib"
+			return GTEST_LIB_DIR + "x64/gtest.a"
 		}
 	}
 	return "Unknown";
