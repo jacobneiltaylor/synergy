@@ -2,29 +2,29 @@
 
 using namespace taylornet::synergy;
 
-loader* loader::inst = nullptr;
+NativeLoader* NativeLoader::inst = nullptr;
 
-loader::loader()
+NativeLoader::NativeLoader()
 {}
 
-loader* loader::getInstance()
+NativeLoader* NativeLoader::getInstance()
 {
-	if (loader::inst == nullptr)
+	if (NativeLoader::inst == nullptr)
 	{
-		loader::inst = new loader();
+		NativeLoader::inst = new NativeLoader();
 	}
 
-	return loader::inst;
+	return NativeLoader::inst;
 }
 
-void loader::unload(library* lib)
+void NativeLoader::unload(NativeLibrary* lib)
 {
 	bool done = false;
-	std::stack<library*> temp;
+	std::stack<NativeLibrary*> temp;
 
 	while(!done)
 	{
-		library* candidate = lib_stack.top();
+		NativeLibrary* candidate = lib_stack.top();
 		lib_stack.pop();
 
 		if (candidate == lib)
@@ -38,17 +38,17 @@ void loader::unload(library* lib)
 	}
 	while(temp.size() > 0)
 	{
-		library* old_candidate = temp.top();
+		NativeLibrary* old_candidate = temp.top();
 		temp.pop();
 		lib_stack.push(old_candidate);
 	}
 }
 
-void loader::unloadAll()
+void NativeLoader::unloadAll()
 {
 	while (lib_stack.size() > 0)
 	{
-		library* lib = lib_stack.top();
+		NativeLibrary* lib = lib_stack.top();
 		lib_stack.pop();
 
 		lib->nativeUnload();

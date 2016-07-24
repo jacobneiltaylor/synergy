@@ -2,14 +2,14 @@
 
 using namespace taylornet::synergy;
 
-library::library(std::string name, std::string filename, void* lib_ptr)
+NativeLibrary::NativeLibrary(std::string name, std::string filename, void* lib_ptr)
 {
 	this->name = name;
 	this->filename = filename;
 	this->lib_ptr = lib_ptr;
 }
 
-void* library::getSymbol(std::string symbol)
+void* NativeLibrary::getSymbol(std::string symbol)
 {
 	if (call_cache.find(symbol) != call_cache.end())
 	{
@@ -23,7 +23,7 @@ void* library::getSymbol(std::string symbol)
 	}
 }
 
-void library::registerSymbol(std::string symbol, void* symbol_ptr)
+void NativeLibrary::registerSymbol(std::string symbol, void* symbol_ptr)
 {
 	if (symbol_ptr == nullptr)
 	{
@@ -35,12 +35,12 @@ void library::registerSymbol(std::string symbol, void* symbol_ptr)
 	}
 }
 
-std::string library::getName()
+std::string NativeLibrary::getName()
 {
 	return name;
 }
 
-std::string library::getFilename()
+std::string NativeLibrary::getFilename()
 {
 	return filename;
 }
