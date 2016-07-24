@@ -46,12 +46,16 @@ namespace taylornet
 {
 	namespace synergy
 	{
-		class loader;
-		class library;
+		template <typename L, typename S> class AbstractLibrary;
+
+		class NativeLoader;
+		class NativeLibrary;
 	}
 }
 
-#include "synergy/loader.h"
-#include "synergy/library.h"
+#include "synergy/abstract_library.h"
+#include "synergy/native_loader.h"
+#include "synergy/native_library.h"
+
 
 #endif

@@ -19,18 +19,18 @@ using namespace taylornet::synergy;
 
 struct SynergyTest : testing::Test
 {
-	loader* libloader;
-	library* cruntime;
+	NativeLoader* loader;
+	NativeLibrary* library;
 
 	SynergyTest()
 	{
-		this->libloader = loader::getInstance();
+		this->loader = NativeLoader::getInstance();
 	}
 
 	virtual ~SynergyTest()
 	{
-		libloader->unloadAll();
-		libloader = nullptr;
+		loader->unloadAll();
+		loader = nullptr;
 	}
 };
 
@@ -46,7 +46,7 @@ TEST_F(SynergyTest, CanLoadLibrary)
 
 	try
 	{
-		cruntime = libloader->load(CRT_FILE_NAME);
+		library = loader->load(CRT_FILE_NAME);
 	}
 	catch (std::runtime_error e)
 	{
@@ -64,8 +64,8 @@ TEST_F(SynergyTest, CanCallForiegnSubroutine)
 
 	try
 	{
-		cruntime = libloader->load(CRT_FILE_NAME);
-		result = cruntime->call<double>("floor", num);
+		library = loader->load(CRT_FILE_NAME);
+		result = library->call<double>("floor", num);
 	}
 	catch (std::runtime_error e)
 	{

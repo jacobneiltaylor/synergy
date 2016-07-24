@@ -2,7 +2,7 @@
 
 using namespace taylornet::synergy;
 
-library* loader::load(std::string dlname)
+NativeLibrary* NativeLoader::load(std::string dlname)
 {
 	// Load library from Windows API's LoadLibrary and check for success
 	void* dlhandle = LoadLibrary(dlname.c_str());
@@ -20,7 +20,7 @@ library* loader::load(std::string dlname)
 	filename = str;
 
 	// Create new library object and add it to the stack
-	library* lib = new library(dlname, filename, dlhandle);
+	NativeLibrary* lib = new NativeLibrary(dlname, filename, dlhandle);
 	lib_stack.push(lib);
 	return lib;
 }
